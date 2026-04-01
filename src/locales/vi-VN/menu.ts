@@ -8,4 +8,7 @@ export default {
 
 	'menu.DanhMuc': 'Danh mục',
 	'menu.DanhMuc.ChucVu': 'Chức vụ',
+
+	'menu.DuLich': 'Du lịch',
+	'menu.DuLich.KhamPhaDiemDen': 'Khám phá điểm đến',
 };

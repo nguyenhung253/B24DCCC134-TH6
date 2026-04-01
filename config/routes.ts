@@ -37,6 +37,20 @@
 		icon: 'ArrowsAltOutlined',
 	},
 
+	// DU LICH
+	{
+		path: '/du-lich',
+		name: 'DuLich',
+		icon: 'CompassOutlined',
+		routes: [
+			{
+				path: '/du-lich/kham-pha',
+				name: 'KhamPhaDiemDen',
+				component: './DuLich/KhamPhaDiemDen',
+			},
+		],
+	},
+
 	// DANH MUC HE THONG
 	// {
 	// 	name: 'DanhMuc',
