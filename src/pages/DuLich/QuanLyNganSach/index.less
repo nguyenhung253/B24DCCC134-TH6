@@ -1,87 +1,101 @@
 .container {
-  padding: 24px;
-  background: #f0f2f5;
-  min-height: 100vh;
+	position: relative;
+	z-index: 1;
+	min-height: 100vh;
+	padding: 24px;
+	background: #f0f2f5;
 
-  @media (max-width: 768px) {
-    padding: 16px;
-  }
+	@media (max-width: 768px) {
+		padding: 16px;
+	}
 }
 
 .header {
-  text-align: center;
-  margin-bottom: 32px;
+	margin-bottom: 32px;
+	text-align: center;
 
-  h1 {
-    font-size: 32px;
-    font-weight: bold;
-    color: #1890ff; // Tiêu đề xanh nổi bật
-    margin-bottom: 8px;
+	h1 {
+		margin-bottom: 8px;
+		color: #1890ff; // Tiêu đề xanh nổi bật
+		font-weight: bold;
+		font-size: 32px;
 
-    @media (max-width: 768px) {
-      font-size: 24px;
-    }
-  }
+		@media (max-width: 768px) {
+			font-size: 24px;
+		}
+	}
 
-  p {
-    font-size: 16px;
-    color: #666; // Mô tả xám nhạt
-    margin-bottom: 0;
+	p {
+		margin-bottom: 0;
+		color: #666; // Mô tả xám nhạt
+		font-size: 16px;
 
-    @media (max-width: 768px) {
-      font-size: 14px;
-    }
-  }
+		@media (max-width: 768px) {
+			font-size: 14px;
+		}
+	}
 }
 
 .card {
-  margin-bottom: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	position: relative;
+	z-index: 1;
+	margin-bottom: 24px;
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card :global(.ant-card-head) {
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.card :global(.ant-card-body) {
+	position: relative;
+	z-index: 1;
 }
 
 .card .ant-card-head-title {
-  font-size: 18px;
-  font-weight: 600;
+	font-weight: 600;
+	font-size: 18px;
 }
 
 .pieChartContainer {
-  margin-top: 16px;
+	margin-top: 16px;
 }
 
 // Hover cho miếng biểu đồ nổi bật hơn
 .pieChartContainer .g2-geometry-interval {
-  transition: all 0.3s;
+	transition: all 0.3s;
 }
 
 .pieChartContainer .g2-geometry-interval:hover {
-  transform: scale(1.05);
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+	transform: scale(1.05);
+	filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
 }
 
 // Legend biểu đồ chữ nhật đẹp
 .pieChartContainer .antv-legend-item text {
-  font-size: 14px;
-  font-weight: 600;
-  fill: #333;
+	font-weight: 600;
+	font-size: 14px;
+	fill: #333;
 }
 
 @media (max-width: 576px) {
-  .card {
-    padding: 12px;
-  }
+	.card {
+		padding: 12px;
+	}
 }
 
 @media (min-width: 577px) and (max-width: 992px) {
-  .container {
-    padding: 20px;
-  }
+	.container {
+		padding: 20px;
+	}
 
-  .header h1 {
-    font-size: 28px;
-  }
+	.header h1 {
+		font-size: 28px;
+	}
 
-  .header p {
-    font-size: 15px;
-  }
+	.header p {
+		font-size: 15px;
+	}
 }

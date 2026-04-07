@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import {
 	getAllDiemDen,
 	filterAndSortDiemDen,
@@ -26,7 +26,7 @@ export default () => {
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
 
 	// Lấy danh sách điểm đến
-	const fetchDanhSach = useCallback(() => {
+	const fetchDanhSach = () => {
 		setLoading(true);
 		try {
 			const data = filterAndSortDiemDen(filter, sort);
@@ -36,10 +36,10 @@ export default () => {
 		} finally {
 			setLoading(false);
 		}
-	}, [filter, sort]);
+	};
 
 	// Khởi tạo dữ liệu
-	const init = useCallback(() => {
+	const init = () => {
 		setLoading(true);
 		try {
 			const data = initData();
@@ -49,100 +49,91 @@ export default () => {
 		} finally {
 			setLoading(false);
 		}
-	}, []);
+	};
 
 	// Thêm điểm đến
-	const themDiemDen = useCallback(
-		(data: Omit<DiemDen.Record, 'id' | 'createdAt'>) => {
-			const errors = validateDiemDen(data);
-			if (errors.length > 0) {
-				message.error(errors[0]);
-				return false;
-			}
+	const themDiemDen = (data: Omit<DiemDen.Record, 'id' | 'createdAt'>) => {
+		const errors = validateDiemDen(data);
+		if (errors.length > 0) {
+			message.error(errors[0]);
+			return false;
+		}
 
-			try {
-				addDiemDen(data);
-				message.success('Thêm điểm đến thành công');
-				fetchDanhSach();
-				return true;
-			} catch (error) {
-				message.error('Có lỗi khi thêm điểm đến');
-				return false;
-			}
-		},
-		[fetchDanhSach],
-	);
+		try {
+			addDiemDen(data);
+			message.success('Thêm điểm đến thành công');
+			fetchDanhSach();
+			return true;
+		} catch (error) {
+			message.error('Có lỗi khi thêm điểm đến');
+			return false;
+		}
+	};
 
 	// Cập nhật điểm đến
-	const capNhatDiemDen = useCallback(
-		(id: string, data: Partial<DiemDen.Record>) => {
-			const errors = validateDiemDen(data);
-			if (errors.length > 0) {
-				message.error(errors[0]);
-				return false;
-			}
+	const capNhatDiemDen = (id: string, data: Partial<DiemDen.Record>) => {
+		const errors = validateDiemDen(data);
+		if (errors.length > 0) {
+			message.error(errors[0]);
+			return false;
+		}
 
-			try {
-				const success = updateDiemDen(id, data);
-				if (success) {
-					message.success('Cập nhật điểm đến thành công');
-					fetchDanhSach();
-					return true;
-				} else {
-					message.error('Không tìm thấy điểm đến');
-					return false;
-				}
-			} catch (error) {
-				message.error('Có lỗi khi cập nhật điểm đến');
+		try {
+			const success = updateDiemDen(id, data);
+			if (success) {
+				message.success('Cập nhật điểm đến thành công');
+				fetchDanhSach();
+				return true;
+			} else {
+				message.error('Không tìm thấy điểm đến');
 				return false;
 			}
-		},
-		[fetchDanhSach],
-	);
+		} catch (error) {
+			message.error('Có lỗi khi cập nhật điểm đến');
+			return false;
+		}
+	};
 
 	// Xóa điểm đến
-	const xoaDiemDen = useCallback(
-		(id: string) => {
-			try {
-				const success = deleteDiemDen(id);
-				if (success) {
-					message.success('Xóa điểm đến thành công');
-					fetchDanhSach();
-					return true;
-				} else {
-					message.error('Không tìm thấy điểm đến');
-					return false;
-				}
-			} catch (error) {
-				message.error('Có lỗi khi xóa điểm đến');
+	const xoaDiemDen = (id: string) => {
+		try {
+			const success = deleteDiemDen(id);
+			if (success) {
+				message.success('Xóa điểm đến thành công');
+				fetchDanhSach();
+				return true;
+			} else {
+				message.error('Không tìm thấy điểm đến');
 				return false;
 			}
-		},
-		[fetchDanhSach],
-	);
+		} catch (error) {
+			message.error('Có lỗi khi xóa điểm đến');
+			return false;
+		}
+	};
 
 	// Lấy chi tiết điểm đến
-	const getChiTiet = useCallback((id: string) => {
+	const getChiTiet = (id: string) => {
 		const item = getDiemDenById(id);
 		setSelectedItem(item);
 		return item;
-	}, []);
+	};
 
 	// Cập nhật filter
-	const updateFilter = useCallback((newFilter: Partial<DiemDen.FilterParams>) => {
+	const updateFilter = (newFilter: Partial<DiemDen.FilterParams>) => {
 		setFilter((prev) => ({ ...prev, ...newFilter }));
-	}, []);
+	};
 
 	// Cập nhật sort
-	const updateSort = useCallback((newSort: DiemDen.SortParams) => {
+	const updateSort = (newSort: DiemDen.SortParams) => {
 		setSort(newSort);
-	}, []);
+	};
 
 	// Reset filter
-	const resetFilter = useCallback(() => {
+	const resetFilter = () => {
 		setFilter({ loaiHinh: 'all' });
 		setSort({ field: 'rating', order: 'desc' });
-	}, []);
+	};
 
 	return {
 		danhSach,

@@ -1,201 +1,208 @@
 .container {
-  padding: 24px;
-  background: #f0f2f5;
-  min-height: 100vh;
+	min-height: 100vh;
+	padding: 24px;
+	background: #f0f2f5;
 
-  @media (max-width: 768px) {
-    padding: 16px;
-  }
+	@media (max-width: 768px) {
+		padding: 16px;
+	}
 }
 
 .header {
-  text-align: center;
-  margin-bottom: 32px;
+	margin-bottom: 32px;
+	text-align: center;
 
-  h1 {
-    font-size: 32px;
-    font-weight: bold;
-    color: #1890ff;
-    margin-bottom: 8px;
+	h1 {
+		margin-bottom: 8px;
+		color: #1890ff;
+		font-weight: bold;
+		font-size: 32px;
 
-    @media (max-width: 768px) {
-      font-size: 24px;
-    }
-  }
+		@media (max-width: 768px) {
+			font-size: 24px;
+		}
+	}
 
-  p {
-    font-size: 16px;
-    color: #666;
+	p {
+		color: #666;
+		font-size: 16px;
 
-    @media (max-width: 768px) {
-      font-size: 14px;
-    }
-  }
+		@media (max-width: 768px) {
+			font-size: 14px;
+		}
+	}
 }
 
 .filterCard {
-  margin-bottom: 24px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	margin-bottom: 24px;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-  label {
-    font-weight: 500;
-    color: #333;
-    display: block;
-    margin-bottom: 8px;
-  }
+	label {
+		display: block;
+		margin-bottom: 8px;
+		color: #333;
+		font-weight: 500;
+	}
 }
 
 .resultInfo {
-  margin-bottom: 16px;
-  font-size: 14px;
-  color: #666;
+	margin-bottom: 16px;
+	color: #666;
+	font-size: 14px;
 }
 
 .destinationCard {
-  border-radius: 8px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  height: 100%;
+	height: 100%;
+	overflow: hidden;
+	border-radius: 8px;
+	transition: all 0.3s ease;
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  }
+	&:hover {
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+		transform: translateY(-4px);
+	}
 
-  :global {
-    .ant-card-body {
-      padding: 16px;
-    }
+	:global {
+		.ant-card-body {
+			padding: 16px;
+		}
 
-    .ant-card-meta-title {
-      margin-bottom: 8px;
-    }
+		.ant-card-meta-title {
+			margin-bottom: 8px;
+		}
 
-    .ant-card-meta-description {
-      color: inherit;
-    }
-  }
+		.ant-card-meta-description {
+			color: inherit;
+		}
+	}
 }
 
 .cardCover {
-  position: relative;
-  height: 200px;
-  overflow: hidden;
+	position: relative;
+	height: 200px;
+	overflow: hidden;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
 
-  &:hover img {
-    transform: scale(1.1);
-  }
+	&:hover img {
+		transform: scale(1.1);
+	}
 
-  @media (max-width: 768px) {
-    height: 180px;
-  }
+	@media (max-width: 768px) {
+		height: 180px;
+	}
 }
 
 .cardOverlay {
-  position: absolute;
-  top: 12px;
-  right: 12px;
+	position: absolute;
+	top: 12px;
+	right: 12px;
 }
 
 .cardTitle {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-
-  span {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-  }
+	span {
+		color: #333;
+		font-weight: 600;
+		font-size: 16px;
+	}
 }
 
 .cardContent {
-  .description {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 12px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.5;
-  }
+	.description {
+		display: -webkit-box;
+		margin-bottom: 12px;
+		overflow: hidden;
+		color: #666;
+		font-size: 14px;
+		line-height: 1.5;
+		text-overflow: ellipsis;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+	}
 
-  .infoItem {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-    font-size: 13px;
-    color: #666;
+	.infoItem {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		margin-bottom: 8px;
+		color: #666;
+		font-size: 13px;
 
-    :global(.anticon) {
-      color: #1890ff;
-    }
-  }
+		:global(.anticon) {
+			color: #1890ff;
+		}
+	}
 
-  .price {
-    font-weight: 600;
-    color: #ff4d4f;
-    font-size: 14px;
-  }
+	.price {
+		color: #ff4d4f;
+		font-weight: 600;
+		font-size: 14px;
+	}
 
-  .rating {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid #f0f0f0;
+	.rating {
+		display: flex;
+		flex-wrap: nowrap;
+		gap: 6px;
+		align-items: center;
+		margin-top: 12px;
+		padding-top: 12px;
+		border-top: 1px solid #f0f0f0;
 
-    .ratingText {
-      font-size: 13px;
-      color: #666;
-    }
-  }
+		:global(.ant-rate) {
+			flex-shrink: 0;
+			line-height: 1;
+		}
+
+		.ratingText {
+			flex: 1;
+			min-width: 0;
+			overflow: hidden;
+			color: #666;
+			font-size: 12px;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+	}
 }
 
 // Responsive
 @media (max-width: 576px) {
-  .destinationCard {
-    :global {
-      .ant-card-body {
-        padding: 12px;
-      }
-    }
-  }
+	.destinationCard {
+		:global {
+			.ant-card-body {
+				padding: 12px;
+			}
+		}
+	}
 
-  .cardTitle span {
-    font-size: 15px;
-  }
+	.cardTitle span {
+		font-size: 15px;
+	}
 
-  .cardContent {
-    .description {
-      font-size: 13px;
-    }
+	.cardContent {
+		.description {
+			font-size: 13px;
+		}
 
-    .infoItem {
-      font-size: 12px;
-    }
-  }
+		.infoItem {
+			font-size: 12px;
+		}
+	}
 }
 
 // Tablet
 @media (min-width: 577px) and (max-width: 992px) {
-  .container {
-    padding: 20px;
-  }
+	.container {
+		padding: 20px;
+	}
 
-  .header h1 {
-    font-size: 28px;
-  }
+	.header h1 {
+		font-size: 28px;
+	}
 }
