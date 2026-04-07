@@ -50,8 +50,8 @@
 			},
 			{
 				name: 'TaoLichTrinh',
-				path: 'tao-lich-trinh',
-				component: './TaoLichTrinh', // Hoặc './DuLich/TaoLichTrinh' tùy cấu trúc thư mục của bạn
+				path: '/du-lich/tao-lich-trinh',
+				component: './DuLich/TaoLichTrinh', 
 			},
 		],
 	},

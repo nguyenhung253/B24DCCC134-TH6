@@ -7,21 +7,17 @@ import styles from './index.less';
 const { Text } = Typography;
 const { Option } = Select;
 
-// Kiểu dữ liệu cho một item trong lịch trình
-interface LichTrinhItem extends DiemDen.Record {
-  idLichTrinh: string; // ID duy nhất cho mỗi lần thêm vào lịch trình
-}
-
-interface NgayLichTrinh {
-  ngay: number;
-  danhSach: LichTrinhItem[];
-}
-
 const TaoLichTrinh: React.FC = () => {
+  // Lấy dữ liệu danh sách điểm đến từ Model gốc
   const { danhSach: danhSachDiemDen, fetchDanhSach } = useModel('dulich.diemDen');
+  
+  // Lấy State và Actions từ Model Lịch Trình
+  const { 
+    lichTrinh, thongKe, themNgay, xoaNgay, 
+    themVaoLichTrinh, xoaKhoiLichTrinh, thayDoiThuTu 
+  } = useModel('dulich.lichTrinh');
 
-  // State quản lý lịch trình
-  const [lichTrinh, setLichTrinh] = useState<NgayLichTrinh[]>([{ ngay: 1, danhSach: [] }]);
+  // State local (cục bộ) chỉ dùng để quản lý trạng thái của Form thêm mới
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [selectedDiemDen, setSelectedDiemDen] = useState<string | undefined>();
 
@@ -29,101 +25,25 @@ const TaoLichTrinh: React.FC = () => {
     fetchDanhSach();
   }, []);
 
-  // Hàm thêm ngày mới
-  const themNgay = () => {
-    setLichTrinh([...lichTrinh, { ngay: lichTrinh.length + 1, danhSach: [] }]);
-    message.success(`Đã thêm Ngày ${lichTrinh.length + 1}`);
-  };
-
-  // Hàm xóa ngày cuối cùng
-  const xoaNgay = () => {
-    if (lichTrinh.length > 1) {
-      setLichTrinh(lichTrinh.slice(0, -1));
-      if (selectedDay === lichTrinh.length) {
-        setSelectedDay(lichTrinh.length - 1);
-      }
-      message.success('Đã xóa ngày cuối cùng');
+  // Xử lý sự kiện UI
+  const handleXoaNgay = () => {
+    const isSuccess = xoaNgay();
+    if (isSuccess && selectedDay === lichTrinh.length) {
+      setSelectedDay(lichTrinh.length - 1);
     }
   };
 
-  // Thêm điểm đến vào ngày đã chọn
-  const themVaoLichTrinh = () => {
+  const handleThemVaoLichTrinh = () => {
     if (!selectedDiemDen) {
       message.warning('Vui lòng chọn một điểm đến!');
       return;
     }
-
     const diemDen = danhSachDiemDen.find((d) => d.id === selectedDiemDen);
     if (diemDen) {
-      const newItem: LichTrinhItem = {
-        ...diemDen,
-        idLichTrinh: `${diemDen.id}-${Date.now()}`,
-      };
-
-      const newLichTrinh = lichTrinh.map((ngayLT) => {
-        if (ngayLT.ngay === selectedDay) {
-          return { ...ngayLT, danhSach: [...ngayLT.danhSach, newItem] };
-        }
-        return ngayLT;
-      });
-
-      setLichTrinh(newLichTrinh);
-      setSelectedDiemDen(undefined);
-      message.success(`Đã thêm ${diemDen.ten} vào Ngày ${selectedDay}`);
+      themVaoLichTrinh(selectedDay, diemDen);
+      setSelectedDiemDen(undefined); // Xóa trắng ô select sau khi thêm thành công
     }
   };
-
-  // Xóa điểm đến khỏi lịch trình
-  const xoaKhoiLichTrinh = (ngay: number, idLichTrinh: string) => {
-    const newLichTrinh = lichTrinh.map((ngayLT) => {
-      if (ngayLT.ngay === ngay) {
-        return { ...ngayLT, danhSach: ngayLT.danhSach.filter((item) => item.idLichTrinh !== idLichTrinh) };
-      }
-      return ngayLT;
-    });
-    setLichTrinh(newLichTrinh);
-  };
-
-  // Sắp xếp thứ tự điểm đến (Di chuyển lên/xuống)
-  const thayDoiThuTu = (ngay: number, index: number, direction: 'up' | 'down') => {
-    const newLichTrinh = [...lichTrinh];
-    const ngayIndex = newLichTrinh.findIndex((n) => n.ngay === ngay);
-    const list = newLichTrinh[ngayIndex].danhSach;
-
-    if (direction === 'up' && index > 0) {
-      [list[index - 1], list[index]] = [list[index], list[index - 1]];
-    } else if (direction === 'down' && index < list.length - 1) {
-      [list[index + 1], list[index]] = [list[index], list[index + 1]];
-    }
-
-    setLichTrinh(newLichTrinh);
-  };
-
-  // Tính toán ngân sách và thời gian
-  const thongKeLichTrinh = () => {
-    let tongChiPhi = 0;
-    let tongThoiGian = 0;
-    let soDiemDen = 0;
-
-    lichTrinh.forEach((ngay) => {
-      ngay.danhSach.forEach((item) => {
-        // Cộng dồn các chi phí[cite: 5]
-        tongChiPhi += (item.giaVeChung || 0) + (item.chiPhiAnUong || 0) + (item.chiPhiLuuTru || 0) + (item.chiPhiDiChuyen || 0);
-        // Cộng dồn thời gian[cite: 5]
-        tongThoiGian += item.thoiGianThamQuan || 0;
-        // Giả lập thời gian di chuyển giữa các điểm đến (ví dụ: 1 giờ di chuyển giữa mỗi điểm)
-        tongThoiGian += 1; 
-        soDiemDen += 1;
-      });
-    });
-
-    // Trừ đi 1 giờ di chuyển thừa ở điểm đến cuối cùng
-    if (soDiemDen > 0) tongThoiGian -= 1;
-
-    return { tongChiPhi, tongThoiGian, soDiemDen };
-  };
-
-  const thongKe = thongKeLichTrinh();
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
@@ -137,7 +57,7 @@ const TaoLichTrinh: React.FC = () => {
       </div>
 
       <Row gutter={[24, 24]}>
-        {/* Cột trái: Cấu hình và Thêm điểm đến */}
+        {/* CỘT TRÁI: FORM CHỨC NĂNG */}
         <Col xs={24} lg={8}>
           <Card title="Thêm điểm đến vào lịch trình" className={styles.cardShadow}>
             <div className={styles.formGroup}>
@@ -165,7 +85,7 @@ const TaoLichTrinh: React.FC = () => {
               </Select>
             </div>
 
-            <Button type="primary" block onClick={themVaoLichTrinh} style={{ marginTop: 24 }}>
+            <Button type="primary" block onClick={handleThemVaoLichTrinh} style={{ marginTop: 24 }}>
               Thêm vào Ngày {selectedDay}
             </Button>
 
@@ -173,7 +93,7 @@ const TaoLichTrinh: React.FC = () => {
             
             <Space direction="vertical" style={{ width: '100%' }}>
               <Button onClick={themNgay} block>+ Thêm ngày mới</Button>
-              <Popconfirm title="Bạn có chắc chắn muốn xóa ngày cuối cùng?" onConfirm={xoaNgay}>
+              <Popconfirm title="Bạn có chắc chắn muốn xóa ngày cuối cùng?" onConfirm={handleXoaNgay}>
                 <Button danger block disabled={lichTrinh.length <= 1}>Xóa ngày cuối</Button>
               </Popconfirm>
             </Space>
@@ -182,13 +102,13 @@ const TaoLichTrinh: React.FC = () => {
           <Card title="Tổng quan lịch trình" className={styles.cardShadow} style={{ marginTop: 24 }}>
             <Row gutter={[16, 16]}>
               <Col span={12}>
-                <Statistic title="Tổng ngân sách dự kiến" value={formatCurrency(thongKe.tongChiPhi)} valueStyle={{ color: '#cf1322', fontSize: '18px' }} />
+                <Statistic title="Tổng ngân sách" value={formatCurrency(thongKe.tongChiPhi)} valueStyle={{ color: '#cf1322', fontSize: '18px' }} />
               </Col>
               <Col span={12}>
-                <Statistic title="Tổng thời gian (Ước tính)" value={`${thongKe.tongThoiGian} giờ`} valueStyle={{ color: '#1890ff', fontSize: '18px' }} />
+                <Statistic title="Tổng thời gian" value={`${thongKe.tongThoiGian} giờ`} valueStyle={{ color: '#1890ff', fontSize: '18px' }} />
               </Col>
               <Col span={12}>
-                <Statistic title="Tổng số điểm đến" value={thongKe.soDiemDen} valueStyle={{ fontSize: '18px' }} />
+                <Statistic title="Điểm đến" value={thongKe.soDiemDen} valueStyle={{ fontSize: '18px' }} />
               </Col>
               <Col span={12}>
                 <Statistic title="Số ngày" value={lichTrinh.length} valueStyle={{ fontSize: '18px' }} />
@@ -197,7 +117,7 @@ const TaoLichTrinh: React.FC = () => {
           </Card>
         </Col>
 
-        {/* Cột phải: Chi tiết lịch trình theo ngày */}
+        {/* CỘT PHẢI: HIỂN THỊ LỊCH TRÌNH */}
         <Col xs={24} lg={16}>
           {lichTrinh.map((ngayLT) => (
             <Card key={ngayLT.ngay} title={`Ngày ${ngayLT.ngay}`} className={styles.dayCard}>
@@ -229,7 +149,7 @@ const TaoLichTrinh: React.FC = () => {
                           <Text type="secondary" className={styles.itemDesc}><EnvironmentOutlined /> {item.moTa}</Text>
                           <Space split={<Divider type="vertical" />}>
                             <Text><ClockCircleOutlined /> Tham quan: {item.thoiGianThamQuan}h</Text>
-                            <Text><DollarOutlined /> Vé: {item.giaVeChung === 0 ? 'Miễn phí' : formatCurrency(item.giaVeChung)}</Text>
+                            <Text><DollarOutlined /> {item.giaVeChung === 0 ? 'Miễn phí vé' : formatCurrency(item.giaVeChung)}</Text>
                           </Space>
                         </Space>
                       }
