@@ -12,7 +12,6 @@ export default () => {
 	]);
 	const [tongChiPhi, setTongChiPhi] = useState<number>(0);
 
-	// Lưu ngân sách dự kiến vào localStorage
 	const loadNganSachDuKien = () => {
 		const stored = localStorage.getItem(STORAGE_KEY_BUDGET);
 		return stored ? parseInt(stored, 10) : 5000000;
@@ -54,12 +53,10 @@ export default () => {
 		]);
 	};
 
-	// Tính toán lần đầu khi mount
 	useEffect(() => {
 		tinhChiPhi();
 	}, []);
 
-	// Lắng nghe sự thay đổi của localStorage (khi lịch trình thay đổi)
 	useEffect(() => {
 		const handleStorageChange = (e: StorageEvent) => {
 			if (e.key === 'lichTrinh') {
@@ -67,13 +64,11 @@ export default () => {
 			}
 		};
 
-		// Lắng nghe sự kiện storage từ các tab khác
 		window.addEventListener('storage', handleStorageChange);
 
-		// Polling để cập nhật trong cùng tab (vì storage event không fire trong cùng tab)
 		const interval = setInterval(() => {
 			tinhChiPhi();
-		}, 1000); // Cập nhật mỗi giây
+		}, 1000);
 
 		return () => {
 			window.removeEventListener('storage', handleStorageChange);
@@ -86,6 +81,6 @@ export default () => {
 		tongChiPhi,
 		nganSachDuKien,
 		setNganSachDuKien,
-		tinhChiPhi, // Export để có thể gọi thủ công nếu cần
+		tinhChiPhi,
 	};
 };

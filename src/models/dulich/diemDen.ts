@@ -25,7 +25,6 @@ export default () => {
 	const [selectedItem, setSelectedItem] = useState<DiemDen.Record | undefined>();
 	const [modalVisible, setModalVisible] = useState<boolean>(false);
 
-	// Lấy danh sách điểm đến
 	const fetchDanhSach = () => {
 		setLoading(true);
 		try {
@@ -38,7 +37,6 @@ export default () => {
 		}
 	};
 
-	// Khởi tạo dữ liệu
 	const init = () => {
 		setLoading(true);
 		try {
@@ -51,7 +49,6 @@ export default () => {
 		}
 	};
 
-	// Thêm điểm đến
 	const themDiemDen = (data: Omit<DiemDen.Record, 'id' | 'createdAt'>) => {
 		const errors = validateDiemDen(data);
 		if (errors.length > 0) {
@@ -70,7 +67,6 @@ export default () => {
 		}
 	};
 
-	// Cập nhật điểm đến
 	const capNhatDiemDen = (id: string, data: Partial<DiemDen.Record>) => {
 		const errors = validateDiemDen(data);
 		if (errors.length > 0) {
@@ -94,7 +90,6 @@ export default () => {
 		}
 	};
 
-	// Xóa điểm đến
 	const xoaDiemDen = (id: string) => {
 		try {
 			const success = deleteDiemDen(id);
@@ -112,24 +107,20 @@ export default () => {
 		}
 	};
 
-	// Lấy chi tiết điểm đến
 	const getChiTiet = (id: string) => {
 		const item = getDiemDenById(id);
 		setSelectedItem(item);
 		return item;
 	};
 
-	// Cập nhật filter
 	const updateFilter = (newFilter: Partial<DiemDen.FilterParams>) => {
 		setFilter((prev) => ({ ...prev, ...newFilter }));
 	};
 
-	// Cập nhật sort
 	const updateSort = (newSort: DiemDen.SortParams) => {
 		setSort(newSort);
 	};
 
-	// Reset filter
 	const resetFilter = () => {
 		setFilter({ loaiHinh: 'all' });
 		setSort({ field: 'rating', order: 'desc' });

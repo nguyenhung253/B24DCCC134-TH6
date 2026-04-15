@@ -6,12 +6,10 @@ import type { LichTrinhType } from '@/services/DuLich/LichTrinh/typing';
 
 const STORAGE_KEY = 'lichTrinh';
 
-// Hàm lưu vào localStorage
 const saveLichTrinh = (data: LichTrinhType.Ngay[]) => {
 	localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 };
 
-// Hàm đọc từ localStorage
 const loadLichTrinh = (): LichTrinhType.Ngay[] => {
 	const stored = localStorage.getItem(STORAGE_KEY);
 	if (stored) {
@@ -25,22 +23,18 @@ const loadLichTrinh = (): LichTrinhType.Ngay[] => {
 };
 
 export default () => {
-	// Khởi tạo từ localStorage
 	const [lichTrinh, setLichTrinh] = useState<LichTrinhType.Ngay[]>(loadLichTrinh);
 
-	// Tự động lưu vào localStorage mỗi khi lichTrinh thay đổi
 	useEffect(() => {
 		saveLichTrinh(lichTrinh);
 	}, [lichTrinh]);
 
-	// Thêm một ngày mới vào lịch trình
 	const themNgay = () => {
 		const newLichTrinh = [...lichTrinh, { ngay: lichTrinh.length + 1, danhSach: [] }];
 		setLichTrinh(newLichTrinh);
 		message.success(`Đã thêm Ngày ${lichTrinh.length + 1}`);
 	};
 
-	// Xóa ngày cuối cùng
 	const xoaNgay = () => {
 		if (lichTrinh.length > 1) {
 			const newLichTrinh = lichTrinh.slice(0, -1);
@@ -52,11 +46,10 @@ export default () => {
 		return false;
 	};
 
-	// Thêm một điểm đến vào một ngày cụ thể
 	const themVaoLichTrinh = (ngay: number, diemDen: DiemDen.Record) => {
 		const newItem: LichTrinhType.Item = {
 			...diemDen,
-			idLichTrinh: `${diemDen.id}-${Date.now()}`, // Tạo ID độc nhất
+			idLichTrinh: `${diemDen.id}-${Date.now()}`,
 		};
 
 		const newLichTrinh = lichTrinh.map((ngayLT) => {
@@ -70,7 +63,6 @@ export default () => {
 		message.success(`Đã thêm ${diemDen.ten} vào Ngày ${ngay}`);
 	};
 
-	// Xóa điểm đến khỏi lịch trình
 	const xoaKhoiLichTrinh = (ngay: number, idLichTrinh: string) => {
 		const newLichTrinh = lichTrinh.map((ngayLT) => {
 			if (ngayLT.ngay === ngay) {
@@ -85,7 +77,6 @@ export default () => {
 		message.success('Đã xóa điểm đến khỏi lịch trình');
 	};
 
-	// Thay đổi thứ tự tham quan (lên/xuống)
 	const thayDoiThuTu = (ngay: number, index: number, direction: 'up' | 'down') => {
 		const newLichTrinh = [...lichTrinh];
 		const ngayIndex = newLichTrinh.findIndex((n) => n.ngay === ngay);
@@ -101,14 +92,12 @@ export default () => {
 		setLichTrinh(newLichTrinh);
 	};
 
-	// Reset lịch trình về mặc định
 	const resetLichTrinh = () => {
 		const defaultLichTrinh = [{ ngay: 1, danhSach: [] }];
 		setLichTrinh(defaultLichTrinh);
 		message.success('Đã reset lịch trình');
 	};
 
-	// Lưu lịch trình và thống kê
 	const luuLichTrinh = () => {
 		if (lichTrinh.length === 0 || lichTrinh.every((ngay) => ngay.danhSach.length === 0)) {
 			message.warning('Lịch trình trống, không thể lưu');
@@ -124,10 +113,8 @@ export default () => {
 		}
 	};
 
-	// Dùng useMemo để chỉ tính toán lại khi mảng lichTrinh thay đổi
 	const thongKe = useMemo(() => tinhToanThongKe(lichTrinh), [lichTrinh]);
 
-	// Trả ra các biến và hàm để View sử dụng
 	return {
 		lichTrinh,
 		thongKe,

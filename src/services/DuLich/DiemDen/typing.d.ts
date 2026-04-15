@@ -8,7 +8,7 @@ export declare namespace DiemDen {
 		diaDiem: string;
 		rating: number;
 		giaVeChung: number;
-		thoiGianThamQuan: number; // số giờ
+		thoiGianThamQuan: number;
 		chiPhiAnUong: number;
 		chiPhiLuuTru: number;
 		chiPhiDiChuyen: number;

@@ -3,7 +3,6 @@ import type { ThongKe } from './typing';
 const STORAGE_KEY_LICH_TRINH = 'lich_trinh_du_lich';
 const STORAGE_KEY_THONG_KE = 'thong_ke_lich_trinh';
 
-// Lấy dữ liệu lịch trình từ localStorage
 export const getLichTrinhData = (): any[] => {
 	try {
 		const data = localStorage.getItem(STORAGE_KEY_LICH_TRINH);
@@ -13,7 +12,6 @@ export const getLichTrinhData = (): any[] => {
 	}
 };
 
-// Lưu thống kê lịch trình (mỗi lần tạo lịch trình mới)
 export const saveThongKeLichTrinh = (lichTrinh: any) => {
 	try {
 		const existing = getThongKeLichTrinh();
@@ -46,7 +44,6 @@ export const saveThongKeLichTrinh = (lichTrinh: any) => {
 	}
 };
 
-// Lấy danh sách thống kê
 export const getThongKeLichTrinh = (): ThongKe.LichTrinhRecord[] => {
 	try {
 		const data = localStorage.getItem(STORAGE_KEY_THONG_KE);
@@ -91,7 +88,6 @@ export const getDiemDenPhoBien = (): ThongKe.DiemDenPhoBien[] => {
 		});
 	});
 
-	// Lấy thông tin điểm đến
 	const diemDenData = localStorage.getItem('diem_den_du_lich');
 	const danhSachDiemDen = diemDenData ? JSON.parse(diemDenData) : [];
 
@@ -118,7 +114,6 @@ export const getThongKeChiPhiTheoHangMuc = (): ThongKe.ChiPhiHangMuc => {
 		diChuyen: 0,
 	};
 
-	// Lấy thông tin điểm đến
 	const diemDenData = localStorage.getItem('diem_den_du_lich');
 	const danhSachDiemDen = diemDenData ? JSON.parse(diemDenData) : [];
 
@@ -137,14 +132,12 @@ export const getThongKeChiPhiTheoHangMuc = (): ThongKe.ChiPhiHangMuc => {
 	return result;
 };
 
-// Tổng quan thống kê
 export const getTongQuanThongKe = (): ThongKe.TongQuan => {
 	const records = getThongKeLichTrinh();
 	const tongSoLichTrinh = records.length;
 	const tongDoanhThu = records.reduce((sum, r) => sum + r.tongChiPhi, 0);
 	const trungBinhChiPhi = tongSoLichTrinh > 0 ? tongDoanhThu / tongSoLichTrinh : 0;
 
-	// Tháng hiện tại
 	const now = new Date();
 	const thangHienTai = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 	const lichTrinhThangNay = records.filter((r) => {
