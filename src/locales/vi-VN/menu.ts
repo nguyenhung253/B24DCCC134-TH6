@@ -11,4 +11,8 @@ export default {
 
 	'menu.DuLich': 'Du lịch',
 	'menu.DuLich.KhamPhaDiemDen': 'Khám phá điểm đến',
+	'menu.DuLich.TaoLichTrinh': 'Tạo lịch trình',
+	'menu.DuLich.QuanLyNganSach': 'Quản lý ngân sách',
+	'menu.DuLich.QuanTriDiemDen': 'Quản trị điểm đến',
+	'menu.DuLich.ThongKe': 'Thống kê',
 };

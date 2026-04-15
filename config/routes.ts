@@ -51,7 +51,22 @@
 			{
 				name: 'TaoLichTrinh',
 				path: '/du-lich/tao-lich-trinh',
-				component: './DuLich/TaoLichTrinh', 
+				component: './DuLich/TaoLichTrinh',
+			},
+			{
+				name: 'QuanLyNganSach',
+				path: '/du-lich/quan-ly-ngan-sach',
+				component: './DuLich/QuanLyNganSach',
+			},
+			{
+				name: 'QuanTriDiemDen',
+				path: '/du-lich/quan-tri-diem-den',
+				component: './DuLich/QuanTriDiemDen',
+			},
+			{
+				name: 'ThongKe',
+				path: '/du-lich/thong-ke',
+				component: './DuLich/ThongKe',
 			},
 		],
 	},

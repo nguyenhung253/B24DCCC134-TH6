@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
-import { Card, Row, Col, Rate, Tag, Select, Input, Slider, Button, Space, Empty, Spin } from 'antd';
+import { Card, Row, Col, Rate, Tag, Select, Input, Slider, Button, Space, Empty, Spin, Modal, message } from 'antd';
 import {
 	EnvironmentOutlined,
 	ClockCircleOutlined,
@@ -8,6 +8,7 @@ import {
 	SearchOutlined,
 	FilterOutlined,
 	ReloadOutlined,
+	PlusOutlined,
 } from '@ant-design/icons';
 import type { DiemDen } from '@/services/DuLich/DiemDen/typing';
 import styles from './index.less';
@@ -18,15 +19,20 @@ const { Meta } = Card;
 
 const KhamPhaDiemDen: React.FC = () => {
 	const model = useModel('dulich.diemDen');
+	const lichTrinhModel = useModel('dulich.lichTrinh');
 
 	if (!model) {
 		return <div>Loading model...</div>;
 	}
 
 	const { danhSach, loading, filter, sort, fetchDanhSach, init, updateFilter, updateSort, resetFilter } = model;
+	const { lichTrinh, themVaoLichTrinh } = lichTrinhModel;
 
 	const [giaRange, setGiaRange] = useState<[number, number]>([0, 2000000]);
 	const [showFilter, setShowFilter] = useState<boolean>(false);
+	const [modalVisible, setModalVisible] = useState<boolean>(false);
+	const [selectedDiemDen, setSelectedDiemDen] = useState<DiemDen.Record | null>(null);
+	const [selectedNgay, setSelectedNgay] = useState<number>(1);
 
 	useEffect(() => {
 		init();
@@ -64,6 +70,20 @@ const KhamPhaDiemDen: React.FC = () => {
 	const handleReset = () => {
 		resetFilter();
 		setGiaRange([0, 2000000]);
+	};
+
+	const handleOpenModal = (diemDen: DiemDen.Record) => {
+		setSelectedDiemDen(diemDen);
+		setSelectedNgay(1);
+		setModalVisible(true);
+	};
+
+	const handleThemVaoLichTrinh = () => {
+		if (selectedDiemDen) {
+			themVaoLichTrinh(selectedNgay, selectedDiemDen);
+			setModalVisible(false);
+			setSelectedDiemDen(null);
+		}
 	};
 
 	const formatCurrency = (value: number) => {
@@ -212,7 +232,6 @@ const KhamPhaDiemDen: React.FC = () => {
 										title={
 											<div className={styles.cardTitle}>
 												<span>{item.ten}</span>
-												<Rate disabled defaultValue={item.rating} style={{ fontSize: 14 }} />
 											</div>
 										}
 										description={
@@ -237,13 +256,19 @@ const KhamPhaDiemDen: React.FC = () => {
 												</div>
 
 												<div className={styles.rating}>
-													<Rate disabled defaultValue={item.rating} />
+													<Rate disabled defaultValue={item.rating} style={{ fontSize: 12 }} />
 													<span className={styles.ratingText}>
-														{item.rating} ({item.danhGiaSoLuong} đánh giá)
+														{item.rating} ({item.danhGiaSoLuong})
 													</span>
 												</div>
 
-												<Button type='primary' block style={{ marginTop: 12 }}>
+												<Button
+													type='primary'
+													block
+													icon={<PlusOutlined />}
+													onClick={() => handleOpenModal(item)}
+													style={{ marginTop: 12 }}
+												>
 													Thêm vào lịch trình
 												</Button>
 											</div>
@@ -255,6 +280,35 @@ const KhamPhaDiemDen: React.FC = () => {
 					</Row>
 				)}
 			</Spin>
+
+			<Modal
+				title='Thêm vào lịch trình'
+				visible={modalVisible}
+				onOk={handleThemVaoLichTrinh}
+				onCancel={() => setModalVisible(false)}
+				okText='Thêm'
+				cancelText='Hủy'
+			>
+				{selectedDiemDen && (
+					<div>
+						<p style={{ marginBottom: 16 }}>
+							<strong>Điểm đến:</strong> {selectedDiemDen.ten} - {selectedDiemDen.diaDiem}
+						</p>
+						<div>
+							<label style={{ display: 'block', marginBottom: 8 }}>
+								<strong>Chọn ngày:</strong>
+							</label>
+							<Select value={selectedNgay} onChange={setSelectedNgay} style={{ width: '100%' }} size='large'>
+								{lichTrinh.map((ngay) => (
+									<Option key={ngay.ngay} value={ngay.ngay}>
+										Ngày {ngay.ngay} {ngay.danhSach.length > 0 && `(${ngay.danhSach.length} điểm)`}
+									</Option>
+								))}
+							</Select>
+						</div>
+					</div>
+				)}
+			</Modal>
 		</div>
 	);
 };
